@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# -*- coding: utf-8; mode: ruby -*-
 # vim: set ft=ruby:
 
 # This file executes as a bash script, which turns around and executes Ruby via
@@ -404,14 +405,8 @@ class Screen
       if component.is_a? String
         ansi.setpos!(line, column)
         # Don't draw off the edge of the screen.
-        #   - (column + component.length) is the number of bytes we'd draw if
-        #     we just dumped the string out.
-        #   - Subtracting that from width gives the number of bytes we should
-        #     draw to avoid going off the edge of the screen.
-        #   - Subtracting 1 from that gives us the zero-indexed location of the
-        #     last character we should draw.
-        chars_to_draw = width - (column + component.length) - 1
-        component = component[0..chars_to_draw]
+        len = component[0..(width - column - 1)].length - 1
+        component = component[0..len]
         ansi.addstr!(component)
         column += component.length
       elsif component == :inverse
